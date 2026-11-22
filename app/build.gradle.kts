@@ -50,6 +50,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.11.1")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.11.1")
 
 
 }
