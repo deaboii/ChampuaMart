@@ -10,5 +10,5 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="by_continuing_you_agree_to_our_terms_of_service_amp_privacy_policy"><![CDATA[By continuing, you agree to our Terms of service & Privacy policy]]></string>
-    <string name="continue">Continue</string>
+    <string name="continue1">Continue</string>
 </resources>
