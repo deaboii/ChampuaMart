@@ -1,4 +1,4 @@
-package com.champua.mart.ui;
+package com.champua.mart.ui.login;
 
 import android.os.Bundle;
 
