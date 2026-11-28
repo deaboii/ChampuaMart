@@ -53,6 +53,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.11.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.11.1")
     implementation("com.google.android.material:material:1.14.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }

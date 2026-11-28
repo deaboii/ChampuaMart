@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,6 +21,17 @@ import com.champua.mart.databinding.BottomSheetOtpBinding;
 import com.champua.mart.viewmodel.LoginViewModel;
 import com.champua.mart.viewmodel.OtpViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -160,6 +172,25 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getLoginSuccess().observe(this, success -> {
 
             if (Boolean.TRUE.equals(success)) {
+
+                FirebaseUser firebaseUser =
+                        FirebaseAuth.getInstance().getCurrentUser();
+                Log.d("firebaseUser", firebaseUser.toString());
+
+                if (firebaseUser != null) {
+
+                    firebaseUser.getIdToken(true)
+                            .addOnSuccessListener(result -> {
+
+                                String idToken = result.getToken();
+                                registerUserInDatabase(idToken);
+
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("AUTH", "Token error", e);
+                            });
+                }
+
                 openMainScreen();
             }
         });
@@ -289,4 +320,41 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void registerUserInDatabase(String idToken) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(
+                new byte[0],
+                null
+        );
+
+        Request request = new Request.Builder()
+                .url("https://champuamartbackendapi.onrender.com/api/users/register")
+                .addHeader("Authorization", "Bearer " + idToken)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("USER_REGISTER", "Failed", e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response)
+                    throws IOException {
+
+                String responseData = response.body() != null
+                        ? response.body().string() : "";
+
+                Log.d("USER_REGISTER", responseData);
+
+                response.close();
+            }
+        });
+    }
+
 }

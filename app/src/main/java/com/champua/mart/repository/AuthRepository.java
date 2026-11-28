@@ -2,6 +2,7 @@
 package com.champua.mart.repository;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -136,6 +137,7 @@ public class AuthRepository {
                 ? auth.getCurrentUser().getUid()
                 : null;
     }
+
 
     public void logout() {
         auth.signOut();
